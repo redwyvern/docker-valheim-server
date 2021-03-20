@@ -49,7 +49,7 @@ RUN cd /opt/vhserver && \
 
 COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
 
-CMD while true; sleep 1; done
+CMD while true; do sleep 1; done
 
 USER root
 
