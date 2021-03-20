@@ -11,6 +11,7 @@ RUN dpkg --add-architecture i386 && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       binutils \
       iproute2 \
+      vim \
       cpio \
       curl \
       wget \
