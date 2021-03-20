@@ -39,8 +39,6 @@ RUN adduser --disabled-password --gecos "" vhserver \
     && mkdir /opt/vhserver \
     && chown vhserver.vhserver /opt/vhserver
 
-#adduser vhserver
-
 USER vhserver
 
 RUN cd /opt/vhserver && \
@@ -48,6 +46,8 @@ RUN cd /opt/vhserver && \
 
 RUN cd /opt/vhserver && \
     ./vhserver auto-install
+
+COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
 
 CMD while true; sleep 1; done
 
