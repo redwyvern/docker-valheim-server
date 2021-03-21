@@ -57,7 +57,10 @@ COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
 
 # Fix file and directory ownership & permissions
 USER root
-RUN chown vhserver.vhserver /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg && \
+RUN mkdir /opt/vhserver/save && \
+    chown vhserver.vhserver \
+        /opt/vhserver/save \
+        /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg && \
     chmod a+x /usr/local/bin/container-entry.sh
 USER vhserver
 
