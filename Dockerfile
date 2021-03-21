@@ -37,20 +37,22 @@ RUN dpkg --add-architecture i386 && \
     apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
 RUN adduser --disabled-password --gecos "" vhserver \
-    && mkdir /opt/vhserver \
-    && chown vhserver.vhserver /opt/vhserver
+    && mkdir /opt/vhserver
 
 COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
 COPY container-entry.sh /usr/local/bin/
 
-RUN chown vhserver.vhserver \
+RUN chown -R vhserver.vhserver \
     /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg \
-    /usr/local/bin/container-entry.sh
+    /usr/local/bin/container-entry.sh \
+    /opt/vhserver
 
 USER vhserver
 
 RUN cd /opt/vhserver && \
-    wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh vhserver
+    wget -O linuxgsm.sh https://linuxgsm.sh && \
+    chmod +x linuxgsm.sh && \
+    bash linuxgsm.sh vhserver
 
 RUN cd /opt/vhserver && \
     ./vhserver auto-install
