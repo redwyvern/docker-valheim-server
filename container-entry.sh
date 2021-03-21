@@ -1,9 +1,10 @@
 #!/bin/bash
 
 onShutdown() {
-    echo Got SIGTEM, shutting down Valheim server...
+    echo Got SIGTERM, shutting down Valheim server...
     ./vhserver stop
     wait $(cat /tmp/vhserver.pid)
+    exit
 }
 
 trap onShutdown SIGTERM
@@ -16,5 +17,5 @@ echo Valheim server starting...
 
 echo $(pgrep valheim_server.) >/tmp/vhserver.pid
 
-tail -f --pid $(cat /tmp/vhserver.pid) log/console/vhserver-console.log
+tail -f --pid $(cat /tmp/vhserver.pid) log/console/vhserver-console.log & wait
 echo Valheim server process has terminated, exiting container...
