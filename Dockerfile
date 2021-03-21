@@ -39,23 +39,28 @@ RUN dpkg --add-architecture i386 && \
 RUN adduser --disabled-password --gecos "" vhserver \
     && mkdir /opt/vhserver
 
-COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
-COPY container-entry.sh /usr/local/bin/
-
-RUN chown -R vhserver.vhserver \
-    /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg \
-    /usr/local/bin/container-entry.sh \
-    /opt/vhserver
+RUN chown vhserver.vhserver /opt/vhserver
 
 USER vhserver
 
+# Download the installer
 RUN cd /opt/vhserver && \
     wget -O linuxgsm.sh https://linuxgsm.sh && \
     chmod +x linuxgsm.sh && \
     bash linuxgsm.sh vhserver
 
-RUN cd /opt/vhserver && \
-    ./vhserver auto-install
+# Install LGSM Valheim Server
+RUN cd /opt/vhserver && ./vhserver auto-install
+
+COPY container-entry.sh /usr/local/bin/
+COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
+
+# Fix file and directory ownership & permissions
+RUN chown -R vhserver.vhserver \
+      /opt/vhserver \
+      /usr/local/bin/container-entry.sh && \
+    chmod a+x \
+      /usr/local/bin/container-entry.sh
 
 ENTRYPOINT [ "container-entry.sh" ]
 
