@@ -40,6 +40,13 @@ RUN adduser --disabled-password --gecos "" vhserver \
     && mkdir /opt/vhserver \
     && chown vhserver.vhserver /opt/vhserver
 
+COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
+COPY container-entry.sh /usr/local/bin/
+
+RUN chown vhserver.vhserver \
+    /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg \
+    /usr/local/bin/container-entry.sh
+
 USER vhserver
 
 RUN cd /opt/vhserver && \
@@ -48,11 +55,7 @@ RUN cd /opt/vhserver && \
 RUN cd /opt/vhserver && \
     ./vhserver auto-install
 
-COPY vhserver-default.cfg /opt/vhserver/lgsm/config-lgsm/vhserver/vhserver.cfg
+ENTRYPOINT [ "container-entry.sh" ]
 
-CMD while true; do sleep 1; done
 
-USER root
-
-#CMD tail -f --pid $(pgrep valheim_server.) log/console/vhserver-console.log
 
